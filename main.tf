@@ -54,3 +54,22 @@ output "nginx_qa_dns" {
   value = module.nginx_server_qa.server_public_dns
   
 }
+
+##import
+
+# aws_instance.server-web:
+resource "aws_instance" "server-web" {
+    ami                                  = "ami-0e449927258d45bc4"
+    instance_type                        = "t2.medium"
+    tags = {
+      Name = "server-web"
+      Environment = "test"
+      Owner = "Jhonpaca@gmail.com"
+      team = "DevOps"
+      Project = "webinar"
+    }
+    vpc_security_group_ids               = [
+        "sg-0e0fd118ac12d0d62",
+    ]
+
+}
