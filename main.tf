@@ -26,8 +26,8 @@ provider "aws" {
 #la instancia de EC2 de AWS
 
 resource "aws_instance" "nginx-server" {
-    ami           = "ami-0e449927258d45bc4" # AMI de Amazon Linux 2023
-    instance_type = "t3.micro"
+    ami           = var.ami_id # AMI de Amazon Linux 2023
+    instance_type = var.instance_type
     
     user_data = <<-EOF
                 #!/bin/bash
@@ -40,8 +40,8 @@ resource "aws_instance" "nginx-server" {
     vpc_security_group_ids = [aws_security_group.nginx-server-sg.id]
 
     tags = {
-      Name = "nginx-server"
-      Environment = "test"
+      Name = var.server_name
+      Environment = var.environment
       Owner = "Jhonpaca@gmail.com"
       team = "DevOps"
       Project = "webinar"
@@ -51,12 +51,12 @@ resource "aws_instance" "nginx-server" {
 #para la clave ssh 
 # ssh-keygen -t rsa -b 2048 -f "nginx-server.key"
 resource "aws_key_pair" "nginx-server-ssh" {
-  key_name = "nginx-server-ssh-2"
-  public_key = file("nginx-server.key.pub")
+  key_name = "${var.server_name}-ssh-2"
+  public_key = file("${var.server_name}.key.pub")
 
   tags = {
-      Name = "nginx-server-ssh-2"
-      Environment = "test"
+      Name = "${var.server_name}-ssh-2"
+      Environment = "${var.environment}"
       Owner = "Jhonpaca@gmail.com"
       team = "DevOps"
       Project = "webinar"
@@ -64,7 +64,7 @@ resource "aws_key_pair" "nginx-server-ssh" {
 }
 
 resource "aws_security_group" "nginx-server-sg" {
-  name        = "nginx-server-sg"
+  name        = "${var.server_name}-sg"
   description = "Security group allowing SSH and HTTP access"
   
   ingress {
@@ -90,8 +90,8 @@ resource "aws_security_group" "nginx-server-sg" {
   }
   
   tags = {
-      Name = "nginx-server-sg"
-      Environment = "test"
+      Name = "${var.server_name}-sg"
+      Environment = "${var.environment}"
       Owner = "Jhonpaca@gmail.com"
       team = "DevOps"
       Project = "webinar"
