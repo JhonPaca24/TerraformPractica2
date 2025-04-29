@@ -1,3 +1,14 @@
+##3 ftstate
+ ##subir el archivo de estado a un bucket de s3
+ terraform {
+    backend "s3" {
+        bucket         = "webinar-terraform-caosbinario-123asd123asd123"
+        key            = "TerPractica2/terraform.tfstate"
+        region         = "us-east-1"
+    }
+ }
+##MODULOS
+
  module "nginx_server_dev" {
     source = "./nginx_server_module"
 
